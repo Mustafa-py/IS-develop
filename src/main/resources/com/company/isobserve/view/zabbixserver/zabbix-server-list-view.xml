@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
+      title="msg://zabbixServerListView.title"
+      focusComponent="zabbixServersDataGrid">
+    <data>
+        <collection id="zabbixServersDc"
+                    class="com.company.isobserve.entity.ZabbixServer">
+            <fetchPlan extends="_base"/>
+            <loader id="zabbixServersDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from ZabbixServer e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <genericFilter component="genericFilter"/>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <layout>
+        <genericFilter id="genericFilter"
+                       dataLoader="zabbixServersDl">
+            <properties include=".*"/>
+        </genericFilter>
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <button id="createButton" action="zabbixServersDataGrid.create"/>
+            <button id="editButton" action="zabbixServersDataGrid.edit"/>
+            <button id="removeButton" action="zabbixServersDataGrid.remove"/>
+            <simplePagination id="pagination" dataLoader="zabbixServersDl"/>
+        </hbox>
+        <dataGrid id="zabbixServersDataGrid"
+                  width="100%"
+                  minHeight="20em"
+                  dataContainer="zabbixServersDc"
+                  columnReorderingAllowed="true">
+            <actions>
+                <action id="create" type="list_create"/>
+                <action id="edit" type="list_edit"/>
+                <action id="remove" type="list_remove"/>
+            </actions>
+            <columns resizable="true">
+                <column property="name"/>
+                <column property="url"/>
+                <column property="username"/>
+                <column property="password"/>
+                <column property="enabled"/>
+            </columns>
+        </dataGrid>
+        <hbox id="lookupActions" visible="false">
+            <button id="selectButton" action="selectAction"/>
+            <button id="discardButton" action="discardAction"/>
+        </hbox>
+    </layout>
+</view>

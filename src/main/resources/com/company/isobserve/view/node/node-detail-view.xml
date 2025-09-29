@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://nodeDetailView.title"
+      focusComponent="form">
+    <data>
+        <instance id="nodeDc"
+                  class="com.company.isobserve.entity.Node">
+            <fetchPlan extends="_base">
+                <property name="zabbixServer" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="nodeDl"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="nodeDc">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+            <textField id="zabbixIdField" property="zabbixId"/>
+            <textField id="nameField" property="name"/>
+            <textField id="ipAddressField" property="ipAddress"/>
+            <textField id="locationLatField" property="locationLat"/>
+            <textField id="locationLonField" property="locationLon"/>
+            <textField id="statusField" property="status"/>
+            <textField id="problemLevelField" property="problemLevel"/>
+            <entityPicker id="zabbixServerField" property="zabbixServer">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+        </formLayout>
+        <hbox id="detailActions">
+            <button id="saveAndCloseButton" action="saveAction"/>
+            <button id="closeButton" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>

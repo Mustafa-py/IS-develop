@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="Is-observe">
+        <createTable tableName="NODE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_NODE"/>
+            </column>
+            <column name="ZABBIX_ID" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IP_ADDRESS" type="VARCHAR(64)"/>
+            <column name="LOCATION_LAT" type="DOUBLE"/>
+            <column name="LOCATION_LON" type="DOUBLE"/>
+            <column name="STATUS" type="VARCHAR(32)"/>
+            <column name="PROBLEM_LEVEL" type="INT"/>
+            <column name="ZABBIX_SERVER_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="Is-observe">
+        <createTable tableName="ZABBIX_SERVER">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ZABBIX_SERVER"/>
+            </column>
+            <column name="NAME" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="URL" type="VARCHAR(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="USERNAME" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PASSWORD" type="VARCHAR(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ENABLED" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="Is-observe">
+        <createIndex indexName="IDX_NODE_ZABBIX_ID" tableName="NODE">
+            <column name="ZABBIX_ID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="4" author="Is-observe">
+        <createIndex indexName="IDX_NODE_ZABBIX_SERVER_ID" tableName="NODE">
+            <column name="ZABBIX_SERVER_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="ZABBIX_SERVER_ID" baseTableName="NODE"
+                                 constraintName="FK_NODE_ON_ZABBIX_SERVER" referencedColumnNames="ID"
+                                 referencedTableName="ZABBIX_SERVER"/>
+    </changeSet>
+    <changeSet id="5" author="Is-observe">
+        <createIndex indexName="IDX_ZABBIX_SERVER_URL" tableName="ZABBIX_SERVER">
+            <column name="URL"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
