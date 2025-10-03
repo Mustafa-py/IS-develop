@@ -64,10 +64,11 @@ public class Node {
 
     /**
      * Current status of the node.
-     * Could be extended in the future with an enum, e.g. OK / PROBLEM / UNKNOWN.
+     * Stored as String in DB, but mapped to NodeStatus enum in code.
      */
     @Column(name = "STATUS", length = 32)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private NodeStatus status;
 
     /**
      * Problem severity level (1–5).
@@ -136,11 +137,11 @@ public class Node {
         this.locationLon = locationLon;
     }
 
-    public String getStatus() {
+    public NodeStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(NodeStatus status) {
         this.status = status;
     }
 
@@ -176,7 +177,7 @@ public class Node {
                 ", ipAddress='" + ipAddress + '\'' +
                 ", locationLat=" + locationLat +
                 ", locationLon=" + locationLon +
-                ", status='" + status + '\'' +
+                ", status=" + status +
                 ", problemLevel=" + problemLevel +
                 '}';
     }

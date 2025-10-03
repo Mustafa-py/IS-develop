@@ -1,9 +1,10 @@
 package com.company.isobserve.controller;
 
-import com.company.isobserve.entity.NodeDetailsDto;
-import com.company.isobserve.entity.NodeSummaryDto;
+import com.company.isobserve.dto.NodeDetailsDto;
+import com.company.isobserve.dto.NodeSummaryDto;
 import com.company.isobserve.entity.Node;
 import io.jmix.core.DataManager;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class NodeController {
                 .map(n -> new NodeSummaryDto(
                         n.getId().toString(),
                         n.getName(),
-                        n.getStatus(),
+                        n.getStatus() != null ? n.getStatus().name() : null,
                         n.getProblemLevel()
                 ))
                 .collect(Collectors.toList());
@@ -39,20 +40,27 @@ public class NodeController {
 
     // --- /api/node/{id} ---
     @GetMapping("/node/{id}")
-    public NodeDetailsDto getNodeById(@PathVariable UUID id) {
+    public ResponseEntity<NodeDetailsDto> getNodeById(@PathVariable UUID id) {
         Node n = dataManager.load(Node.class)
                 .id(id)
-                .one();
+                .optional()
+                .orElse(null);
 
-        return new NodeDetailsDto(
+        if (n == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        NodeDetailsDto dto = new NodeDetailsDto(
                 n.getId().toString(),
                 n.getName(),
-                n.getStatus(),                // String
+                n.getStatus() != null ? n.getStatus().name() : null,
                 n.getProblemLevel(),
                 n.getIpAddress(),
                 n.getLocationLat(),
                 n.getLocationLon(),
                 n.getZabbixServer() != null ? n.getZabbixServer().getName() : null
         );
+
+        return ResponseEntity.ok(dto);
     }
 }

@@ -1,4 +1,4 @@
-package com.company.isobserve.entity;
+package com.company.isobserve.dto;
 
 public class NodeDetailsDto {
     private final String id;
